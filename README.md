@@ -1,6 +1,6 @@
 # EkOrrPod
 
-[![CI Status](https://img.shields.io/travis/201456038/EkOrrPod.svg?style=flat)](https://travis-ci.org/201456038/EkOrrPod)
+[![CI Status](https://img.shields.io/travis/ajha-cs/EkOrrPod.svg?style=flat)](https://travis-ci.org/ajha-cs/EkOrrPod)
 [![Version](https://img.shields.io/cocoapods/v/EkOrrPod.svg?style=flat)](https://cocoapods.org/pods/EkOrrPod)
 [![License](https://img.shields.io/cocoapods/l/EkOrrPod.svg?style=flat)](https://cocoapods.org/pods/EkOrrPod)
 [![Platform](https://img.shields.io/cocoapods/p/EkOrrPod.svg?style=flat)](https://cocoapods.org/pods/EkOrrPod)
@@ -22,7 +22,7 @@ pod 'EkOrrPod'
 
 ## Author
 
-201456038, ajha@cloudsmith.io
+ajha-cs, ajha@cloudsmith.io
 
 ## License
 
