@@ -10,6 +10,19 @@ target 'EkOrrPod_Example' do
 
     pod 'Quick', '~> 2.2.0'
     pod 'Nimble', '~> 10.0.0'
-    pod 'AFNetworking', '~> 4.0'
+    # pod 'AFNetworking', '~> 4.0'
+    # Networking
+    pod 'Alamofire', '~> 5.8', :source => 'https://github.com/CocoaPods/Specs.git'
+    # pod 'CocoaLumberjack/Swift', '~> 3.9', :source => 'https://github.com/CocoaPods/Specs.git'
+    # pod 'Kingfisher', '~> 7.12', :source => 'https://github.com/CocoaPods/Specs.git'
+    # pod 'SnapKit', '~> 5.6', :source => 'https://github.com/CocoaPods/Specs.git'
+    # pod 'Promises', '~> 1.2', :source => 'https://github.com/CocoaPods/Specs.git'
+    # pod 'KeychainAccess', '~> 4.2', :source => 'https://github.com/CocoaPods/Specs.git'
+    # pod 'SwiftDate', '~> 6.0', :source => 'https://github.com/CocoaPods/Specs.git'
+    # pod 'CryptoSwift', '~> 1.6', :source => 'https://github.com/CocoaPods/Specs.git'
+    # pod 'UserNotificationsSwift', '~> 0.7', :source => 'https://github.com/CocoaPods/Specs.git'
+    # pod 'MaterialComponents', '~> 122.1', :source => 'https://github.com/CocoaPods/Specs.git'
+    # pod 'Swinject', '~> 2.8', :source => 'https://github.com/CocoaPods/Specs.git'
+
   end
 end
