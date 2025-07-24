@@ -1,0 +1,12 @@
+use_frameworks!
+
+target 'EkOrrPod_Example' do
+  pod 'EkOrrPod', :path => '../'
+
+  target 'EkOrrPod_Tests' do
+    inherit! :search_paths
+
+    pod 'Quick', '~> 2.2.0'
+    pod 'Nimble', '~> 10.0.0'
+  end
+end
