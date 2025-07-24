@@ -1,0 +1,90 @@
+name: Mirror CocoaPods to Cloudsmith
+
+on:
+  workflow_dispatch:
+
+jobs:
+  push-pods:
+    runs-on: ubuntu-latest
+    env:
+      # Cloudsmith & repo where pods will be published
+      CLOUDSMITH_OWNER: orgcs
+      CLOUDSMITH_REPO: cocoarepo
+      # List of CocoaPods you want to mirror (name@version)
+      POD_LIST: |
+        Alamofire@5.8.2
+        SwiftyJSON@5.0.2
+        ReactiveSwift@6.1.0
+        CocoaLumberjack@3.9.3
+        Kingfisher@7.0.0
+    steps:
+      # 1. Checkout this workflow
+      - uses: actions/checkout@v4
+
+      # 2. Install Ruby and CocoaPods
+      - name: Setup Ruby and CocoaPods
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.x'
+      - run: |
+          gem install cocoapods
+
+      # 3. Install Cloudsmith CLI
+      - name: Install Cloudsmith CLI
+        run: |
+          pip install --upgrade cloudsmith-cli
+
+      # 4. Authenticate to Cloudsmith
+      - name: Cloudsmith Login
+        run: |
+          echo "${{ secrets.CLOUDSMITH_API_KEY }}" | cloudsmith login --stdin
+        # Ensure you have added CLOUDSMITH_API_KEY secret in your repo
+
+      # 5. Clone the CocoaPods Specs repo
+      - name: Clone CocoaPods Specs
+        run: |
+          git clone https://github.com/CocoaPods/Specs.git ./Specs
+
+      # 6. For each pod, fetch its sources, package it, and push to Cloudsmith
+      - name: Mirror Pods
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          IFS=$'\n'
+          for spec in $POD_LIST; do
+            name="${spec%@*}"
+            version="${spec#*@}"
+            echo "=== Processing ${name}@${version} ==="
+
+            # 6.1 Fetch the pod into local Pods directory
+            pod cache clean --all
+            pod fetch "$name" --version="$version"
+
+            # 6.2 Package the pod as a tarball (source + podspec)
+            #    This uses CocoaPods' `pod package` to bundle sources
+            pod package Pods/"$name" --spec-sources=https://github.com/CocoaPods/Specs.git \
+                                    --exclude-deps \
+                                    --force \
+                                    --no-mangle \
+                                    --no-mangle-framework \
+                                    --output-dir=packaged
+
+            # 6.3 Find the generated .zip package
+            pkg_file=$(find packaged -type f -name "${name}.zip" | head -n1)
+            if [[ ! -f "$pkg_file" ]]; then
+              echo "ERROR: package for ${name}@${version} not found"
+              exit 1
+            fi
+
+            # 6.4 Push to Cloudsmith as a CocoaPods package
+            cloudsmith push cocoapods \
+              --owner "$CLOUDSMITH_OWNER" \
+              --repo "$CLOUDSMITH_REPO" \
+              --file "$pkg_file" \
+              --version "$version" \
+              --name "$name" \
+              --republish=true
+
+            echo ">>> Pushed ${name}@${version} to Cloudsmith"
+          done
