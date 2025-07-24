@@ -35,8 +35,8 @@ jobs:
       - name: Cloudsmith CLI aa gya
         uses: cloudsmith-io/cloudsmith-cli-action@v1.0.3
         with:
-            oidc-namespace: ${{ env.CLOUDSMITH_ORG }}
-            oidc-service-slug: ${{ env.CLOUDSMITH_SERVICESLUG }}
+            oidc-namespace: ${{ vars.CLOUDSMITH_ORG }}
+            oidc-service-slug: ${{ vars.CLOUDSMITH_SERVICESLUG }}
 
       # 5. Clone the CocoaPods Specs repo
       - name: Clone CocoaPods Specs
