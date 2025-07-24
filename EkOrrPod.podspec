@@ -9,8 +9,8 @@
 Pod::Spec.new do |s|
   s.name             = 'EkOrrPod'
   s.version          = '0.1.0'
-  s.summary          = 'A short description of EkOrrPod.'
-
+  s.summary          = 'Just trying to replicate the issue.'
+  s.swift_versions   = ['5.0']
 # This description is used to generate tags and improve search results.
 #   * Think: What does it do? Why did you write it? What is the focus?
 #   * Try to keep it short, snappy and to the point.
@@ -21,15 +21,15 @@ Pod::Spec.new do |s|
 TODO: Add long description of the pod here.
                        DESC
 
-  s.homepage         = 'https://github.com/201456038/EkOrrPod'
+  s.homepage         = 'https://github.com/ajha-cs/EkOrrPod'
   # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
-  s.author           = { '201456038' => 'ajha@cloudsmith.io' }
-  s.source           = { :git => 'https://github.com/201456038/EkOrrPod.git', :tag => s.version.to_s }
+  s.author           = { 'ajha-cs' => 'ajha@cloudsmith.io' }
+  s.source           = { :git => 'https://github.com/ajha-cs/EkOrrPod.git', :tag => s.version.to_s }
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
   s.platform = :osx
-  s.osx.deployment_target = "10.10"
+  s.osx.deployment_target = "10.13"
 
   s.source_files = 'EkOrrPod/Classes/**/*'
 

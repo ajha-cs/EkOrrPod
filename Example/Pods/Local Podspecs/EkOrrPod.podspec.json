@@ -1,0 +1,26 @@
+{
+  "name": "EkOrrPod",
+  "version": "0.1.0",
+  "summary": "Just trying to replicate the issue.",
+  "swift_versions": [
+    "5.0"
+  ],
+  "description": "TODO: Add long description of the pod here.",
+  "homepage": "https://github.com/ajha-cs/EkOrrPod",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
+  "authors": {
+    "ajha-cs": "ajha@cloudsmith.io"
+  },
+  "source": {
+    "git": "https://github.com/ajha-cs/EkOrrPod.git",
+    "tag": "0.1.0"
+  },
+  "platforms": {
+    "osx": "10.13"
+  },
+  "source_files": "EkOrrPod/Classes/**/*",
+  "swift_version": "5.0"
+}

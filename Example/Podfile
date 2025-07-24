@@ -1,3 +1,5 @@
+source 'https://dl.cloudsmith.io/basic/orgcs/cocoarepo/cocoapods/index.git'
+
 use_frameworks!
 
 target 'EkOrrPod_Example' do

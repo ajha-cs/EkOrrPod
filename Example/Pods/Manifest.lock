@@ -1,0 +1,27 @@
+PODS:
+  - EkOrrPod (0.1.0)
+  - Nimble (10.0.0)
+  - Quick (2.2.1)
+
+DEPENDENCIES:
+  - EkOrrPod (from `../`)
+  - Nimble (~> 10.0.0)
+  - Quick (~> 2.2.0)
+
+SPEC REPOS:
+  trunk:
+    - Nimble
+    - Quick
+
+EXTERNAL SOURCES:
+  EkOrrPod:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  EkOrrPod: f01415579e4577d800ecd44a909f4cb24d58fba6
+  Nimble: 5316ef81a170ce87baf72dd961f22f89a602ff84
+  Quick: f5754d69b7013f5864c29aab9ae6f0c79c5bc200
+
+PODFILE CHECKSUM: 483ca31c41406425e15ea2fbcfaf45157ab03b98
+
+COCOAPODS: 1.16.2
