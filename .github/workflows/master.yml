@@ -25,7 +25,7 @@ jobs:
       - name: Setup Ruby and CocoaPods
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.x'
+          ruby-version: '3.4.5'
       - run: |
           gem install cocoapods
 
