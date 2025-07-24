@@ -1,9 +1,9 @@
 # EkOrrPod
 
 [![CI Status](https://img.shields.io/travis/ajha-cs/EkOrrPod.svg?style=flat)](https://travis-ci.org/ajha-cs/EkOrrPod)
-[![Version](https://img.shields.io/cocoapods/v/EkOrrPod.svg?style=flat)](https://cocoapods.org/pods/EkOrrPod)
-[![License](https://img.shields.io/cocoapods/l/EkOrrPod.svg?style=flat)](https://cocoapods.org/pods/EkOrrPod)
-[![Platform](https://img.shields.io/cocoapods/p/EkOrrPod.svg?style=flat)](https://cocoapods.org/pods/EkOrrPod)
+[![Version](https://img.shields.io/cocoapods/0.1.0/EkOrrPod.svg?style=flat)](https://cocoapods.org/pods/EkOrrPod)
+[![License](https://img.shields.io/cocoapods/MIT/EkOrrPod.svg?style=flat)](https://cocoapods.org/pods/EkOrrPod)
+[![Platform](https://img.shields.io/cocoapods/osx/EkOrrPod.svg?style=flat)](https://cocoapods.org/pods/EkOrrPod)
 
 ## Example
 
