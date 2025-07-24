@@ -1,7 +1,9 @@
 name: Mirror CocoaPods to Cloudsmith
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - master
 
 jobs:
   push-pods:
@@ -37,7 +39,7 @@ jobs:
       # 4. Authenticate to Cloudsmith
       - name: Cloudsmith Login
         run: |
-          echo "${{ secrets.CLOUDSMITH_API_KEY }}" | cloudsmith login --stdin
+          echo "${{ secrets.CLOUDSMITH_API_KEY }}" | cloudsmith login
         # Ensure you have added CLOUDSMITH_API_KEY secret in your repo
 
       # 5. Clone the CocoaPods Specs repo
