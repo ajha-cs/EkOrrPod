@@ -9,8 +9,8 @@ jobs:
   mirror-pods:
     runs-on: ubuntu-latest
     env:
-      CLOUDSMITH_OWNER: your-org
-      CLOUDSMITH_REPO: your-repo
+      CLOUDSMITH_OWNER: orgcs
+      CLOUDSMITH_REPO: cocoarepo
       POD_LIST: |
         Alamofire@5.8.2
         SwiftyJSON@5.0.2
