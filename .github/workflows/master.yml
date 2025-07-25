@@ -51,42 +51,55 @@ jobs:
       - name: Mirror Pods
         shell: bash
         run: |
-          set -euo pipefail
+            set -euo pipefail
 
-          IFS=$'\n'
-          for spec in $POD_LIST; do
+            IFS=$'\n'
+
+            for spec in $POD_LIST; do
             name="${spec%@*}"
             version="${spec#*@}"
             echo "=== Processing ${name}@${version} ==="
 
-            # 6.1 Fetch the pod into local Pods directory
+            # 6.1 Clear cache and create working directory
             pod cache clean --all
-            pod fetch "$name" --version="$version"
+            mkdir -p packaged
+            cd packaged
+            
+            # 6.2 Create a temporary Podfile to download the pod
+            cat > Podfile << EOF
+            platform :ios, '12.0'
+            target 'TempTarget' do
+            pod '${name}', '${version}'
+            end
+            EOF
 
-            # 6.2 Package the pod as a tarball (source + podspec)
-            #    This uses CocoaPods' `pod package` to bundle sources
-            pod package Pods/"$name" --spec-sources=https://github.com/CocoaPods/Specs.git \
-                                    --exclude-deps \
-                                    --force \
-                                    --no-mangle \
-                                    --no-mangle-framework \
-                                    --output-dir=packaged
-
-            # 6.3 Find the generated .zip package
-            pkg_file=$(find packaged -type f -name "${name}.zip" | head -n1)
-            if [[ ! -f "$pkg_file" ]]; then
-              echo "ERROR: package for ${name}@${version} not found"
-              exit 1
+            # 6.3 Install the pod to get source files
+            pod install --no-integrate
+            
+            # 6.4 Create archive from the downloaded pod
+            if [[ -name}" ]]; then
+                # Create zip archive of the pod source
+                cd "Pods/${name}"
+                zip -r "../../${name}.zip" . -x "*.git*"
+                cd ../..
+                pkg_file="${name}.zip"
+            else
+                echo "ERROR: Pod ${name} not found in Pods directory"
+                exit 1
             fi
 
-            # 6.4 Push to Cloudsmith as a CocoaPods package
+            # 6.5 Push to Cloudsmith as a CocoaPods package
             cloudsmith push cocoapods \
-              --owner "$CLOUDSMITH_OWNER" \
-              --repo "$CLOUDSMITH_REPO" \
-              --file "$pkg_file" \
-              --version "$version" \
-              --name "$name" \
-              --republish=true
+                "${CLOUDSMITH_OWNER}/${CLOUDSMITH_REPO}" \
+                "${pkg_file}" \
+                --name="${name}" \
+                --version="${version}" \
+                --republish
 
             echo ">>> Pushed ${name}@${version} to Cloudsmith"
-          done
+            
+            # Clean up
+            cd ..
+            rm -rf packaged
+            done
+
