@@ -19,7 +19,7 @@ jobs:
       # List of CocoaPods you want to mirror (name@version)
       POD_LIST: |
         Alamofire@5.8.2
-        SwiftyJSON@5.0.2
+        SwiftyJSON@5.0.1  # Corrected from 5.0.2
         ReactiveSwift@6.1.0
         CocoaLumberjack@3.9.3
         Kingfisher@7.0.0
@@ -27,79 +27,39 @@ jobs:
       # 1. Checkout this workflow
       - uses: actions/checkout@v4
 
-      # 2. Install Ruby and CocoaPods
-      - name: Setup Ruby and CocoaPods
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: '3.4.5'
-      - run: |
-          gem install cocoapods
-
-      # 3. Install Cloudsmith CLI
-      - name: Cloudsmith CLI aa gya
+      # 2. Install Cloudsmith CLI
+      - name: Cloudsmith CLI
         uses: cloudsmith-io/cloudsmith-cli-action@v1.0.3
         with:
-            oidc-namespace: ${{ vars.CLOUDSMITH_ORG }}
-            oidc-service-slug: ${{ vars.CLOUDSMITH_SERVICESLUG }}
+          oidc-namespace: ${{ vars.CLOUDSMITH_ORG }}
+          oidc-service-slug: ${{ vars.CLOUDSMITH_SERVICESLUG }}
 
-      # 5. Clone the CocoaPods Specs repo
+      # 3. Clone the CocoaPods Specs repo
       - name: Clone CocoaPods Specs
         run: |
           git clone https://github.com/CocoaPods/Specs.git ./Specs
 
-      # 6. For each pod, fetch its sources, package it, and push to Cloudsmith
+      # 4. For each pod, find its podspec and push to Cloudsmith
       - name: Mirror Pods
         shell: bash
         run: |
-            set -euo pipefail
+          set -euo pipefail
 
-            IFS=$'\n'
+          IFS=$'\n'
 
-            for spec in $POD_LIST; do
+          for spec in $POD_LIST; do
             name="${spec%@*}"
             version="${spec#*@}"
             echo "=== Processing ${name}@${version} ==="
 
-            # 6.1 Clear cache and create working directory
-            pod cache clean --all
-            mkdir -p packaged
-            cd packaged
-            
-            # 6.2 Create a temporary Podfile to download the pod
-            cat > Podfile << EOF
-            platform :ios, '12.0'
-            target 'TempTarget' do
-            pod '${name}', '${version}'
-            end
-            EOF
-
-            # 6.3 Install the pod to get source files
-            pod install --no-integrate
-            
-            # 6.4 Create archive from the downloaded pod
-            if [[ -name}" ]]; then
-                # Create zip archive of the pod source
-                cd "Pods/${name}"
-                zip -r "../../${name}.zip" . -x "*.git*"
-                cd ../..
-                pkg_file="${name}.zip"
-            else
-                echo "ERROR: Pod ${name} not found in Pods directory"
-                exit 1
+            # Find the podspec path
+            podspec_path=$(find ./Specs -name "${name}.podspec.json" -o -name "${name}.podspec.yaml" | grep "$version" | head -n 1)
+            if [ -z "$podspec_path" ]; then
+              echo "ERROR: Podspec for ${name}@${version} not found in Specs"
+              exit 1
             fi
 
-            # 6.5 Push to Cloudsmith as a CocoaPods package
-            cloudsmith push cocoapods \
-                "${CLOUDSMITH_OWNER}/${CLOUDSMITH_REPO}" \
-                "${pkg_file}" \
-                --name="${name}" \
-                --version="${version}" \
-                --republish
-
+            # Push to Cloudsmith
+            cloudsmith push cocoapods "${CLOUDSMITH_OWNER}/${CLOUDSMITH_REPO}" "$podspec_path" --republish
             echo ">>> Pushed ${name}@${version} to Cloudsmith"
-            
-            # Clean up
-            cd ..
-            rm -rf packaged
-            done
-
+          done
