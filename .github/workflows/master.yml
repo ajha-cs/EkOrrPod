@@ -26,8 +26,11 @@ jobs:
       - run: gem install cocoapods
 
       # Install Cloudsmith CLI
-      - name: Install Cloudsmith CLI
+      - name: Cloudsmith CLI aa gya
         uses: cloudsmith-io/cloudsmith-cli-action@v1.0.3
+        with:
+            oidc-namespace: ${{ vars.CLOUDSMITH_ORG }}
+            oidc-service-slug: ${{ vars.CLOUDSMITH_SERVICESLUG }}
 
       # Clone CocoaPods Specs repository
       - name: Clone Specs Repo
