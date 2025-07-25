@@ -44,22 +44,31 @@ jobs:
       - name: Download and Upload Pods
         shell: bash
         run: |
-          IFS=$'\n'
-          for spec in $POD_LIST; do
+        
+            #!/usr/bin/bash --noprofile --norc -e -o pipefail
+
+            # Set IFS to newline to split POD_LIST correctly
+            IFS=$'\n'
+
+            # Ensure POD_LIST is properly formatted (assuming space-separated or newline-separated)
+            POD_LIST="Alamofire@5.8.2 SwiftyJSON@5.0.2"
+
+            for spec in $POD_LIST; do
+            # Extract name and version from spec (e.g., Alamofire@5.8.2 -> name=Alamofire, version=5.8.2)
             name="${spec%@*}"
             version="${spec#*@}"
             echo "Processing ${name}@${version}"
 
-            # Clear cache and set up working directory
+            # Clear pod cache and set up working directory
             pod cache clean --all
             mkdir -p packaged
             cd packaged
 
-            # Create a Podfile for the pod
-            cat > Podfile << EOF
+            # Create Podfile using a here-document (no indentation on EOF)
+            cat > Podfile <<EOF
             platform :ios, '12.0'
             target 'TempTarget' do
-              pod '${name}', '${version}'
+            pod '${name}', '${version}'
             end
             EOF
 
@@ -73,14 +82,14 @@ jobs:
 
             # Upload to Cloudsmith
             cloudsmith push cocoapods \
-              "${CLOUDSMITH_OWNER}/${CLOUDSMITH_REPO}" \
-              "${name}.zip" \
-              --name="${name}" \
-              --version="${version}"
+                "${CLOUDSMITH_OWNER}/${CLOUDSMITH_REPO}" \
+                "${name}.zip" \
+                --name="${name}" \
+                --version="${version}"
 
             echo "Uploaded ${name}@${version}"
 
             # Clean up
             cd ..
             rm -rf packaged
-          done
+            done
